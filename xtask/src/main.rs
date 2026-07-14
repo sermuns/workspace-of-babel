@@ -1,5 +1,11 @@
-use std::{fs, path::Path, time::Instant};
+use std::{
+    fs::{self, exists},
+    path::Path,
+    process::exit,
+    time::Instant,
+};
 
+use anyhow::bail;
 use itertools::Itertools;
 
 const MAIN_RS_CONTENTS: &str = r#"fn main() {
@@ -29,27 +35,31 @@ publish.workspace = true"#,
 }
 
 fn main() -> anyhow::Result<()> {
-    let mut number_of_crates = 0u64;
+    let Some(max_name_len) = std::env::args().nth(1) else {
+        bail!("please specify max crate name length as argument!!");
+    };
+
+    let mut num_crates_generated = 0u64;
 
     let before = Instant::now();
 
     let _ = fs::remove_dir_all("crates");
     fs::create_dir("crates")?;
 
-    for len in 1..=2 {
+    for len in 1..=max_name_len.parse()? {
         for name_ascii_bytes in std::iter::repeat(b'a'..b'z')
             .take(len)
             .multi_cartesian_product()
         {
             let name = str::from_utf8(&name_ascii_bytes)?;
             create_crate(name)?;
-            number_of_crates += 1;
+            num_crates_generated += 1;
         }
     }
 
     println!(
         "generated {} crates in {:?}",
-        number_of_crates,
+        num_crates_generated,
         before.elapsed()
     );
 
