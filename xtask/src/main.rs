@@ -13,6 +13,7 @@ fn create_crate(name: &str) -> anyhow::Result<()> {
     let cargo_toml_contents = format!(
         r#"[package]
 name = "{}"
+license.workspace = true
 edition.workspace = true
 publish.workspace = true"#,
         name,
