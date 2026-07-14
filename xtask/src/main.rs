@@ -1,9 +1,4 @@
-use std::{
-    fs::{self, exists},
-    path::Path,
-    process::exit,
-    time::Instant,
-};
+use std::{fs, path::Path, time::Instant};
 
 use anyhow::bail;
 use itertools::Itertools;
