@@ -2,3 +2,5 @@
 
 crates/*
 !crates/a
+
+Cargo.lock
