@@ -1,0 +1,4 @@
+[package]
+name = "a"
+edition.workspace = true
+publish.workspace = true
